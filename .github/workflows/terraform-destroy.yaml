@@ -29,5 +29,14 @@ jobs:
                        -backend-config="key=joseph03-wk18-3.1" \
                        -backend-config="region=us-east-1"
 
+    - name: Check for Terraform Lock
+      run: |
+        LOCK_ID=$(aws dynamodb scan --table-name terraform-lock-table --query "Items[0].LockID.S" --output text || echo "NO_LOCK")
+        if [ "$LOCK_ID" != "NO_LOCK" ]; then
+          terraform force-unlock $LOCK_ID
+        else
+          echo "No active lock found."
+        fi
+
     - name: Terraform Destroy
       run: terraform destroy --auto-approve

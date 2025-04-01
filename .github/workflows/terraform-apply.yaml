@@ -33,6 +33,7 @@ jobs:
         terraform init -backend-config="bucket=joseph-sctps3bucket" \
                        -backend-config="key=joseph03-wk18-3.1" \
                        -backend-config="region=us-east-1"
+                       
     - name: Terraform Plan
       run: terraform plan
    
