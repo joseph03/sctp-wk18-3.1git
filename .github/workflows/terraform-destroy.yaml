@@ -33,6 +33,7 @@ jobs:
     - name: Check for Terraform Lock
       run: |
        LOCK_ID=$(aws dynamodb scan --table-name terraform-lock-table --query "Items[0].LockID.S" --output text 2>/dev/null || echo "NO_LOCK")
+       echo "The value of LOCK_ID is $LOCK_ID"
        if [[ "$LOCK_ID" != "NO_LOCK" && "$LOCK_ID" != "null" ]]; then
          echo "Unlocking Terraform state with LOCK_ID=$LOCK_ID"
          terraform force-unlock $LOCK_ID
