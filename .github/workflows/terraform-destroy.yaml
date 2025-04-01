@@ -24,9 +24,10 @@ jobs:
       uses: hashicorp/setup-terraform@v2
    
     - name: Terraform Init with Backend
-      run: terraform init -backend-config="bucket=sctp-ce9-tfstate" \
-                          -backend-config="key=joseph03-wk18-3.1" \
-                          -backend-config="region=us-east-1"
+      run: |
+        terraform init -backend-config="bucket=sctp-ce9-tfstate" \
+                       -backend-config="key=joseph03-wk18-3.1" \
+                       -backend-config="region=us-east-1"
 
     - name: Terraform Destroy
       run: terraform destroy --auto-approve
