@@ -39,7 +39,8 @@ jobs:
     #    fi
 
     - name: Terraform Destroy
-      run: terraform destroy --auto-approve
+      run: terraform destroy --auto-approve  #cannot destroy tfstate file
 
+    # this is used to destroy the tfstate file
     - name: Remove Terraform State File
       run: aws s3 rm s3://joseph-sctps3bucket/joseph03-wk18-3.1
