@@ -5,8 +5,8 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "sctp-ce9-tfstate"
-    key    = "joseph03-wk18-3.1" # add 'a' to use terraform apply 
+    bucket = "joseph-sctps3bucket"  # "sctp-ce9-tfstate"
+    key    = "joseph03-wk18-3.1"  
     region = "us-east-1"
   }
 }
