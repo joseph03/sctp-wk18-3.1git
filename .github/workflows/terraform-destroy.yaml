@@ -23,6 +23,10 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
    
+    #- name: Terraform Init
+    #  run: terraform init
+
+    # changed to this if there are more than one yaml file use terraform commands
     - name: Terraform Init with Backend
       run: |
         terraform init -backend-config="bucket=joseph-sctps3bucket" \
