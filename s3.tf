@@ -1,8 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
-
 terraform {
   backend "s3" {
     bucket = "joseph-sctps3bucket"  # "sctp-ce9-tfstate"
