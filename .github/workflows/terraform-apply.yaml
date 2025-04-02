@@ -28,7 +28,7 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    # changed to this if there are more than one yaml file use terraform commands
+    # below is not needed for terraform apply as it is provided in tfstate.tf
     #- name: Terraform Init with Backend
     #  run: |
     #    terraform init -backend-config="bucket=joseph-sctps3bucket" \
