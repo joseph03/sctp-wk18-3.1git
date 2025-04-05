@@ -1,6 +1,6 @@
 name: Terraform Destroy S3 - no checkout
 
-##
+###
 on: workflow_dispatch  # to manually triggered
 
 env:            
