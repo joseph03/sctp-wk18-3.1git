@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # checkout is not required if only terraform destroy is used
     - name: Checkout
       uses: actions/checkout@v3
    
@@ -23,10 +24,11 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
    
+    # this is good enough to destroy resources created by terraform except tfstate file
     #- name: Terraform Init
     #  run: terraform init
 
-    # changed to this if there are more than one yaml file use terraform commands
+    # testing of init -backend-config however a normal init is good enough
     - name: Terraform Init with Backend
       run: |
         terraform init -backend-config="bucket=joseph-sctps3bucket" \
@@ -45,6 +47,7 @@ jobs:
          echo "No active Terraform lock found."
        fi
 
+    # this is used to destroy resources created by terraform
     - name: Terraform Destroy
       run: terraform destroy --auto-approve  #cannot destroy tfstate file
 
