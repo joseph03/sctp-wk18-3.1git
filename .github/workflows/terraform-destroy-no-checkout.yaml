@@ -1,4 +1,4 @@
-name: Terraform Destroy S3 using init
+name: Terraform Destroy S3 - no checkout
 
 on: workflow_dispatch  # to manually triggered
 
