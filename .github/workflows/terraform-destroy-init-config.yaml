@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # checkout is not required if only terraform destroy is used
+    # Action/checkout is required to point to the right tfstate file 
+    # even if only terraform destroy is used in job of github action workflow.
     - name: Checkout
       uses: actions/checkout@v3
    
