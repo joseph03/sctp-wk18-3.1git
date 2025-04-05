@@ -1,0 +1,53 @@
+name: Terraform Destroy S3 using init -backend-config
+
+on: workflow_dispatch   # to manually triggered
+
+env:            
+  AWS_REGION: us-east-1  
+
+jobs:
+  CICD:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+   
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+   
+    #- name: Terraform Init
+    #  run: terraform init
+
+    # changed to this if there are more than one yaml file use terraform commands
+    - name: Terraform Init with Backend
+      run: |
+        terraform init -backend-config="bucket=joseph-sctps3bucket" \
+                       -backend-config="key=joseph03-wk18-3.1" \
+                       -backend-config="region=us-east-1"
+
+    # check if tfstate file is locked
+    - name: Check for Terraform Lock
+      run: |
+       LOCK_ID=$(aws dynamodb scan --table-name terraform-lock-table --query "Items[0].LockID.S" --output text 2>/dev/null || echo "NO_LOCK")
+       echo "The value of LOCK_ID is $LOCK_ID"
+       if [[ "$LOCK_ID" != "NO_LOCK" && "$LOCK_ID" != "null" ]]; then
+         echo "Unlocking Terraform state with LOCK_ID=$LOCK_ID"
+         terraform force-unlock $LOCK_ID
+       else
+         echo "No active Terraform lock found."
+       fi
+
+    - name: Terraform Destroy
+      run: terraform destroy --auto-approve  #cannot destroy tfstate file
+
+    # this is used to destroy the tfstate file
+    - name: Remove Terraform State File
+      run: aws s3 rm s3://joseph-sctps3bucket/joseph03-wk18-3.1

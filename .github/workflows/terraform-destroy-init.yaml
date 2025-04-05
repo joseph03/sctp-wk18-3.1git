@@ -1,6 +1,6 @@
-name: Terraform Destroy S3
+name: Terraform Destroy S3 using init
 
-on: workflow_dispatch
+on: workflow_dispatch  # to manually triggered
 
 env:            
   AWS_REGION: us-east-1  
@@ -23,15 +23,15 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
    
-    #- name: Terraform Init
-    #  run: terraform init
+    - name: Terraform Init
+      run: terraform init
 
     # changed to this if there are more than one yaml file use terraform commands
-    - name: Terraform Init with Backend
-      run: |
-        terraform init -backend-config="bucket=joseph-sctps3bucket" \
-                       -backend-config="key=joseph03-wk18-3.1" \
-                       -backend-config="region=us-east-1"
+    #- name: Terraform Init with Backend
+    #  run: |
+    #    terraform init -backend-config="bucket=joseph-sctps3bucket" \
+    #                   -backend-config="key=joseph03-wk18-3.1" \
+    #                   -backend-config="region=us-east-1"
 
     # check if tfstate file is locked
     - name: Check for Terraform Lock
