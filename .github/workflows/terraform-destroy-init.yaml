@@ -1,6 +1,7 @@
 name: Terraform Destroy S3 using init
 
 on: workflow_dispatch  # to manually triggered
+# use tfstatefile specified in tfstat.tf
 
 env:            
   AWS_REGION: us-east-1  

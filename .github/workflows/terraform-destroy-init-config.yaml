@@ -1,6 +1,7 @@
 name: Terraform Destroy S3 using init -backend-config
 
 on: workflow_dispatch   # to manually triggered
+#	init use specific tfstate file specified by "terraform init" in yml file
 
 env:            
   AWS_REGION: us-east-1  
