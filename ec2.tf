@@ -4,6 +4,8 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public[count.index].id
 
+  associate_public_ip_address = true
+
   user_data = <<-EOF
               #!/bin/bash
               echo "Hello from AZ us-east-1${["a", "b", "c"][count.index]}" > /var/www/html/index.html
@@ -21,4 +23,14 @@ resource "aws_lb_target_group_attachment" "web" {
   target_group_arn = aws_lb_target_group.tg.arn
   target_id        = aws_instance.web[count.index].id
   port             = 80
+}
+
+resource "aws_instance" "private" {
+  count         = 2
+  ami           = "ami-0c02fb55956c7d316"
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.private[count.index].id
+  tags = {
+    Name = "${local.name_prefix}private-${count.index}"
+  }
 }

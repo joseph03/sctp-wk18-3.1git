@@ -2,8 +2,10 @@
 resource "aws_subnet" "public" {
   count             = 3
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.${count.index}.0/24"  #10.0.0.0/24  10.0.1.0/24  10.0.2.0/24
+  cidr_block        = "10.0.${count.index}.0/24" #10.0.0.0/24  10.0.1.0/24  10.0.2.0/24
   availability_zone = "us-east-1${["a", "b", "c"][count.index]}"
+
+  map_public_ip_on_launch = true
   tags = {
     Name = "${local.name_prefix}public-subnet-${count.index}"
   }
@@ -39,7 +41,7 @@ resource "aws_eip" "nat" {
 # NAT Gateway in a public subnet
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public[0].id  # Using first public subnet
+  subnet_id     = aws_subnet.public[0].id # Using first public subnet
   tags = {
     Name = "${local.name_prefix}nat-gw"
   }
