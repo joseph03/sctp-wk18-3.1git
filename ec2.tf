@@ -11,6 +11,7 @@ resource "aws_instance" "web" {
               echo "Hello from AZ us-east-1${["a", "b", "c"][count.index]}" > /var/www/html/index.html
               yum install -y httpd
               systemctl start httpd
+              systemctl enable httpd
               EOF
 
   tags = {
