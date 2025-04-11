@@ -6,6 +6,7 @@ on:
 
 env:            
   AWS_REGION: us-east-1  
+  MY_IP_CIDR: ${{ secrets.MY_IP_CIDR }}
 
 jobs:
   CICD:
@@ -40,4 +41,4 @@ jobs:
       run: terraform plan
    
     - name: Terraform Apply
-      run: terraform apply --auto-approve
+      run: terraform apply --auto-approve -var="my_ip_cidr=${{ env.MY_IP_CIDR }}"

@@ -57,7 +57,7 @@ resource "aws_security_group" "public_ec2_sg" {
     to_port     = 22
     protocol    = "tcp"
     #cidr_blocks = ["0.0.0.0/0"] 
-    cidr_blocks = [local.my_ip_cidr] # Restrict to my local machine's public ip
+    cidr_blocks = [var.my_ip_cidr] # Restrict to my local machine's public ip
   }
 
   # Allow ALL outbound traffic (for yum/SSH forwarding)
