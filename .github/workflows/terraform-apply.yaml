@@ -41,7 +41,7 @@ jobs:
     #                   -backend-config="region=us-east-1"
 
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform plan -input=false # add input=false to solve hanging problem
    
     - name: Terraform Apply
       run: terraform apply --auto-approve
