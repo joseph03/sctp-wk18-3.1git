@@ -6,8 +6,7 @@ on:
 
 env:            
   AWS_REGION: us-east-1  
-  MY_IP_CIDR: ${{ secrets.MY_IP_CIDR }}
-
+  
 jobs:
   CICD:
     runs-on: ubuntu-latest
@@ -26,7 +25,11 @@ jobs:
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
-   
+
+    - name: Get public IP address
+      id: ip
+      run: echo "MY_IP_CIDR=$(curl -s https://api.ipify.org)/32" >> $GITHUB_ENV
+    
     - name: Terraform Init
       run: terraform init
 
@@ -41,4 +44,8 @@ jobs:
       run: terraform plan
    
     - name: Terraform Apply
-      run: terraform apply --auto-approve -var="my_ip_cidr=${{ env.MY_IP_CIDR }}"
+      run: terraform apply --auto-approve
+      # if var is used to pass value
+      # run: terraform apply --auto-approve -var="my_ip_cidr=${{ env.MY_IP_CIDR }}"
+      # or
+      # run: terraform apply -var="my_ip_cidr=$MY_IP_CIDR"
