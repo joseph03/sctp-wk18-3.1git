@@ -2,14 +2,27 @@ resource "aws_instance" "web" {
   count         = 3
   ami           = "ami-0c02fb55956c7d316"
   instance_type = "t2.micro"
+  key_name      = "joseph-key" # <-- ADD THIS LINE
   subnet_id     = aws_subnet.public[count.index].id
   vpc_security_group_ids = [aws_security_group.public_ec2_sg.id] # Updated SG
   associate_public_ip_address = true
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "Hello from AZ us-east-1${["a", "b", "c"][count.index]}" > /var/www/html/index.html
+              # Install Apache
               yum install -y httpd
+
+              # Disable Apache's default welcome page
+              sed -i 's/^/#/' /etc/httpd/conf.d/welcome.conf  # Comment out the config
+              
+              # Create custom index.html
+              echo "Hello from AZ us-east-1${["a", "b", "c"][count.index]}" > /var/www/html/index.html
+              
+              # Set proper permissions (ADDED HERE)
+              chmod 644 /var/www/html/index.html
+              chown apache:apache /var/www/html/index.html
+              
+              # Start and enable Apache
               systemctl start httpd
               systemctl enable httpd
               EOF
@@ -38,12 +51,13 @@ resource "aws_security_group" "public_ec2_sg" {
     security_groups = [aws_security_group.alb_sg.id] # Restrict to ALB only
   }
 
-  # Allow SSH from your IP (replace 1.2.3.4/32 with your IP)
+  # Allow SSH from local machine's IP
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # 1.2.3.4/32. Restrict to your IP for security. how?
+    #cidr_blocks = ["0.0.0.0/0"] 
+    cidr_blocks = [local.my_ip_cidr] # Restrict to my local machine's public ip
   }
 
   # Allow ALL outbound traffic (for yum/SSH forwarding)
