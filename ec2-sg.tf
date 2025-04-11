@@ -101,6 +101,7 @@ resource "aws_security_group" "private_ec2_sg" {
   }
 }
 
+# allow ssh from public to private
 resource "aws_security_group_rule" "allow_ssh_from_public_ec2" {
   type                     = "ingress"
   from_port                = 22
