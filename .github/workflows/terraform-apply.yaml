@@ -41,9 +41,8 @@ jobs:
     #                   -backend-config="region=us-east-1"
 
     - name: Terraform Plan
-      #run: terraform plan              # hang
-      #run: terraform plan -input=false # error
-      run: terraform plan -input=false -var-file="terraform.tfvars"
+      run: terraform plan   # commented off *.tfvars in .gitignore
+      #run: terraform plan -input=false -var-file="terraform.tfvars"
 
    
     - name: Terraform Apply
