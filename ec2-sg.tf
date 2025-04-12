@@ -77,7 +77,7 @@ resource "aws_instance" "private" {
   count         = 2
   ami           = "ami-0c02fb55956c7d316"
   instance_type = "t2.micro"
-  #need to add key here else permission denied
+  #need to add key here else permission denied when ssh from public instance
   key_name      = "joseph-key" # Add the same key as public instances
   subnet_id     = aws_subnet.private[count.index].id
   vpc_security_group_ids = [aws_security_group.private_ec2_sg.id] # Updated SG
